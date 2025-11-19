@@ -84,14 +84,6 @@ This repository contains a collection of Python scripts designed to solve variou
 
 ---
 
-## 🚀 How to Run
-
-Ensure you have Python 3 installed. Open your terminal and run any file:
-
-```bash
-# Example
-python Week1_5.py
-
 # 🐍 Week 2: Data Structures & Date Logic
 
 This repository contains Python scripts focused on two main areas: **Calendar/Date Algorithms** (handling leap years, day counting) and **Dictionary/JSON Manipulation** (updating nested records and calculating averages).
@@ -187,11 +179,3 @@ This repository contains Python scripts focused on two main areas: **Calendar/Da
 | `{2548: {'artist': 'Bon Jovi', 'tracks': []}}} | 2548|artist|` | `{2548: {'tracks': []}}` (Artist deleted) |
 
 ---
-
-## 🚀 How to Run
-
-Ensure you have Python 3 installed. Open your terminal and run any file:
-
-```bash
-# Example
-python week2_1.py
