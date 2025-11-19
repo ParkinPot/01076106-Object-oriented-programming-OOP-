@@ -1,231 +1,93 @@
-## ------------------------------------------------------------------
-## START: Week1_1.py - The Pattern Sum Problem
-## ------------------------------------------------------------------
+# 🐍 Week 1: Python Logic & Algorithms
 
-def sum(a):
-    """
-    Calculates the sum: a + aa + aaa + aaaa, where aa, aaa, and aaaa 
-    are concatenations of the string representation of a.
-    Example: if a = 5, returns 5 + 55 + 555 + 5555 = 6170.
-    """
-    a = int(a)
-    return a + int(str(a) * 2) + int(str(a) * 3) + int(str(a) * 4)
+This repository contains a collection of Python scripts designed to solve various algorithmic challenges, ranging from mathematical series summation to logic-based puzzles like parking fee calculation and palindrome discovery.
 
-a = input()
-try:
-    output = sum(a)
-    print(output)
-except ValueError:
-    # Handle cases where input 'a' is not an integer
-    # The original file does not explicitly handle this, 
-    # but a 'try-except' block is good practice.
-    print("Invalid input for sum calculation.")
+## 📂 Table of Contents
 
-## ------------------------------------------------------------------
-## END: Week1_1.py
-## ------------------------------------------------------------------
+| File | Challenge Name | Description |
+| :--- | :--- | :--- |
+| `Week1_1.py` | **Series Summation** | Calculates $a + aa + aaa + aaaa$. |
+| `Week1_2.py` | **Palindrome Product** | Finds the largest palindrome from the product of two $n$-digit numbers. |
+| `Week1_3.py` | **Parking Fee** | Calculates parking costs based on specific time duration tiers. |
+| `Week1_5.py` | **Smallest Number** | Sorts digits to form the smallest possible valid integer. |
+| `Week1_6.py` | **Max Product** | Finds the maximum product of any two integers in a list (handling negatives). |
 
+---
 
-## ------------------------------------------------------------------
-## START: Week1_2.py - Largest Palindrome Product
-## ------------------------------------------------------------------
+## 📝 Exercise Details
 
-def largest_palindrome_product(num_digits):
-    """
-    Finds the largest palindrome made from the product of two n-digit numbers.
-    """
-    if num_digits <= 1:
-        return "Invalid"
-    
-    # Largest n-digit number (e.g., 99 for num_digits=2)
-    max_num = 10**num_digits - 1
-    # Smallest n-digit number (e.g., 10 for num_digits=2)
-    min_num = 10**(num_digits - 1)
-    max_palindrome = 0
+### 1. Series Summation (`Week1_1.py`)
+**Goal:** Compute the value of $a + aa + aaa + aaaa$ given a single digit $a$.
+* **Input:** A single integer $a$.
+* **Logic:** Concatenates the string representation of the number before summing.
 
-    # Iterate downwards from the largest n-digit number
-    for i in range(max_num, min_num - 1, -1):
-        for j in range(i, min_num - 1, -1):
-            product = i * j
-            
-            # Optimization: If the current product is already smaller 
-            # than the largest found palindrome, stop checking smaller j values
-            if product <= max_palindrome:
-                break  
-            
-            # Check if the product is a palindrome
-            if str(product) == str(product)[::-1]:  
-                max_palindrome = product
-    
-    return max_palindrome if max_palindrome > 0 else 0
+| Input | Output | Explanation |
+| :--- | :--- | :--- |
+| `9` | `11106` | $9 + 99 + 999 + 9999$ |
+| `3` | `3702` | $3 + 33 + 333 + 3333$ |
 
-value = input()
+---
 
-try:
-    value = int(value)
-    if value <= 0:
-        print("Invalid")
-    else:
-        output = largest_palindrome_product(value)
-        print(output)
-except ValueError:
-    print("Invalid")
+### 2. Largest Palindrome Product (`Week1_2.py`)
+**Goal:** Find the largest palindrome made from the product of two $n$-digit numbers.
+* **Input:** An integer representing the number of digits ($n$).
+* **Constraints:** If input $\le 1$ or non-numeric, returns "Invalid".
 
-## ------------------------------------------------------------------
-## END: Week1_2.py
-## ------------------------------------------------------------------
+| Input | Output | Explanation |
+| :--- | :--- | :--- |
+| `2` | `9009` | $91 \times 99 = 9009$ |
+| `3` | `906609` | $913 \times 993 = 906609$ |
+| `1` | `Invalid` | Digits must be $> 1$. |
 
+---
 
-## ------------------------------------------------------------------
-## START: Week1_3.py - Parking Time and Fee Calculation
-## ------------------------------------------------------------------
+### 3. Parking Fee Calculator (`Week1_3.py`)
+**Goal:** Calculate parking fees based on entry and exit timestamps.
+* **Input:** Four integers: `InHour InMinute OutHour OutMinute`.
+* **Pricing Rules:**
+    * $\le$ 15 mins: **Free** (0).
+    * 15 mins to 3 hours: **10** per hour (fractions rounded up).
+    * 3 hours to 6 hours: First 3 hrs is 30, then **20** per extra hour.
+    * $>$ 6 hours: Flat fee of **200**.
 
-def check_time(Inmin, Outmin, Inhr, Outhr):
-    """
-    Calculates the parking fee based on entry and exit times.
-    Inputs are assumed to be strings of hours and minutes (In/Out).
-    """
-    Inhr = int(Inhr)
-    Inmin = int(Inmin)
-    Outhr = int(Outhr)
-    Outmin = int(Outmin)
+| Input | Output | Explanation |
+| :--- | :--- | :--- |
+| `7 0 7 10` | `0` | Duration 10 minutes (Free). |
+| `7 0 8 0` | `10` | Duration 1 hour. |
+| `7 0 20 0` | `200` | Duration > 6 hours. |
 
-    # Handle 24:xx time by converting it to 00:xx for continuous time calculation
-    if Outhr == 24:
-        Outhr = 0
+---
 
-    # Convert times to total minutes from the start of the day
-    a = Inhr * 60 + Inmin  # Entry time in minutes
-    b = Outhr * 60 + Outmin # Exit time in minutes
+### 4. Smallest Number Formation (`Week1_5.py`)
+**Goal:** Given a list of digits, arrange them to form the smallest possible number.
+* **Input:** A space-separated list of numbers.
+* **Logic:** Sorts the array. If the smallest number is 0, it swaps it with the first non-zero number to ensure the number doesn't start with 0 (unless the answer is 0).
 
-    time_diff = b - a
+| Input | Output | Explanation |
+| :--- | :--- | :--- |
+| `3 1 0 2` | `1023` | Sorted: `0 1 2 3` → Swapped: `1 0 2 3`. |
+| `5 9 1 4` | `1459` | Digits sorted ascending. |
+| `0 0 5` | `500` | Validates leading non-zero. |
 
-    # The logic below implements the tiered fee structure
-    if 0 < time_diff <= 15:
-        return("0")
-    elif a < 0 or Inmin < 0 or Outmin < 0 or Inhr < 0 or Outhr < 0:
-        # Added check for negative time components
-        return("Invalid")
-    elif 15 < time_diff <= 180:
-        # Up to 3 hours (180 min)
-        if 0 < Outmin - Inmin <= 60:
-            Hr = (Outhr - Inhr) + 1 # Bill for an extra hour if minute difference is positive
-            return(Hr * 10)
-        else:
-            Hr = Outhr - Inhr
-            return(Hr * 10)
-    elif 180 < time_diff < 360:
-        # 3 to 6 hours (360 min)
-        Hr = (Outhr - Inhr - 3)
-        if 0 < Outmin - Inmin <= 60:
-            Hr = Hr + 1
-            return((Hr * 20) + 30) # Base fee of 30 plus 20 per hour after the first 3
-        else:
-            return((Hr * 20) + 30)
-    elif time_diff >= 360:
-        return("200") # Capped fee
-    else:
-        # Handles time_diff <= 0 or other invalid scenarios
-        return("Invalid")
+---
 
-try:
-    # Expects four space-separated inputs: Inhr Inmin Outhr Outmin
-    Inhr, Inmin, Outhr, Outmin = input("").split()
-    output = check_time(Inmin, Outmin, Inhr, Outhr)
-    print(output)
-except ValueError:
-    # Handles incorrect number of inputs or non-integer inputs
-    print("Invalid")
+### 5. Maximum Product Pair (`Week1_6.py`)
+**Goal:** Find the maximum product of two integers in a list.
+* **Input:** A list of integers (e.g., `[1, 2, 3]` or `1 2 3`).
+* **Logic:** Checks the product of the two largest numbers versus the product of the two smallest (most negative) numbers.
 
-## ------------------------------------------------------------------
-## END: Week1_3.py
-## ------------------------------------------------------------------
+| Input | Output | Explanation |
+| :--- | :--- | :--- |
+| `[1, 10, 100, 2]` | `200` | $10 \times 20 = 200$ (Largest pair). |
+| `[-10, -20, 5, 3]` | `200` | $-10 \times -20 = 200$ (Negatives result in positive max). |
+| `[5]` | `Invalid` | List too short. |
 
+---
 
-## ------------------------------------------------------------------
-## START: Week1_5.py - Custom Integer Array Sorting and Concatenation
-## ------------------------------------------------------------------
+## 🚀 How to Run
 
-def sort(value):
-    """
-    Sorts a list of space-separated integers, applying a custom swap 
-    rule if the smallest number is zero, and returns the result as a 
-    concatenated string.
-    """
-    numbers = list(map(int, value.split()))
+Ensure you have Python 3 installed. Open your terminal and run any file:
 
-    length_numbers = len(numbers)
-
-    # Validation: Length must be between 2 and 10
-    if length_numbers > 10 or length_numbers < 2:
-        return "Invalid"
-    else:
-        numbers.sort()
-        
-        # Validation: Check for negative numbers after sorting
-        if numbers[0] < 0:
-            return "Invalid"
-            
-        # Custom Rule: If the smallest number is 0
-        if numbers[0] == 0:
-            # Find the first non-zero number and swap it with the leading 0
-            for i in range(1, len(numbers)):
-                if numbers[i] != 0:
-                    numbers[0], numbers[i] = numbers[i], numbers[0]
-                    break
-            # Return the concatenated string
-            return ''.join(map(str, numbers))
-        
-        # If no leading zero, return the concatenated sorted string
-        return ''.join(map(str, numbers))
-
-value = input()
-try:
-    output = sort(value)
-    print(output)
-except:
-    print("Invalid")
-
-## ------------------------------------------------------------------
-## END: Week1_5.py
-## ------------------------------------------------------------------
-
-
-## ------------------------------------------------------------------
-## START: Week1_6.py - Max Product of Two Numbers
-## ------------------------------------------------------------------
-
-def max_product(lst):
-    """
-    Finds the maximum product of any two numbers in the list.
-    """
-    if len(lst) < 2:
-        return "Invalid"
-    
-    # Check for the second smallest element being zero (potential specific constraint)
-    # The list is sorted immediately below, so lst[1] will be the second smallest number.
-    lst.sort()
-    
-    if lst[1] == 0:
-        return "Invalid"
-    
-    # The max product is either the product of the two largest numbers (lst[-1] * lst[-2]) 
-    # or the product of the two smallest numbers (lst[0] * lst[1], used for two large negatives).
-    return max(lst[-1] * lst[-2], lst[0] * lst[1])
-
-value = input().strip()
-try:
-    # Input processing to handle list-like string input (e.g., "[1, 2, 3]")
-    value = value.strip("[]")  
-    value = value.replace(",", " ") 
-    value = value.split() 
-    value = [int(x) for x in value]  
-    output = max_product(value)
-except ValueError:
-    output = "Invalid" 
-
-print(output)
-
-## ------------------------------------------------------------------
-## END: Week1_6.py
-## ------------------------------------------------------------------
+```bash
+# Example
+python Week1_5.py
