@@ -84,6 +84,15 @@ This repository contains a collection of Python scripts designed to solve variou
 
 ---
 
+## 🚀 How to Run
+
+Ensure you have Python 3 installed. Open your terminal and run any file:
+
+```bash
+# Example
+python Week1_5.py
+```
+
 # 🐍 Week 2: Data Structures & Date Logic
 
 This repository contains Python scripts focused on two main areas: **Calendar/Date Algorithms** (handling leap years, day counting) and **Dictionary/JSON Manipulation** (updating nested records and calculating averages).
@@ -179,3 +188,258 @@ This repository contains Python scripts focused on two main areas: **Calendar/Da
 | `{2548: {'artist': 'Bon Jovi', 'tracks': []}}} | 2548|artist|` | `{2548: {'tracks': []}}` (Artist deleted) |
 
 ---
+
+## 🚀 How to Run
+
+Ensure you have Python 3 installed. Open your terminal and run any file:
+
+```bash
+# Example
+python week2_1.py
+```
+
+# 🎓 Week 3: Object-Oriented Programming (Enrollment System)
+
+This week focuses on building a complete **University Enrollment System** using Python's Object-Oriented Programming (OOP) features. The script manages complex relationships between Students, Subjects, Teachers, and Enrollments, demonstrating encapsulation, property decorators, and logic for grading and GPA calculation.
+
+## 📂 File Overview
+
+| File | System Name | Description |
+| :--- | :--- | :--- |
+| `week3.py` | **University Registrar** | A comprehensive system to manage student enrollments, assigning teachers, recording grades, and calculating GPA (GPS). |
+
+---
+
+## 🏗️ System Architecture (Classes)
+
+The system is built upon four primary classes that interact with each other:
+
+| Class | Description | Key Attributes |
+| :--- | :--- | :--- |
+| **`Student`** | Represents a university student. | `student_id`, `student_name` |
+| **`Subject`** | Represents a course offered. | `subject_id`, `subject_name`, `credit`, `teacher` |
+| **`Teacher`** | Represents an instructor. | `teacher_id`, `teacher_name` |
+| **`Enrollment`** | Link table connecting a Student to a Subject. | `student` (obj), `subject` (obj), `grade` |
+
+---
+
+## 📝 Key Features & Logic
+
+### 1. Enrollment Management
+**Goal:** Manage students signing up for or dropping classes.
+* **Logic:**
+    * **Enroll:** Checks if the student is already enrolled to prevent duplicates. Creates an `Enrollment` object linking the Student and Subject.
+    * **Drop:** Removes the specific `Enrollment` instance. Returns "Not Found" if the student wasn't enrolled.
+
+| Function Call | Return / Output | Explanation |
+| :--- | :--- | :--- |
+| `enroll_to_subject(student1, cs101)` | `"Done"` | Successfully registered. |
+| `enroll_to_subject(student1, cs101)` | `"Already Enrolled"` | Prevents duplicate registration. |
+| `drop_from_subject(student1, cs101)` | `"Done"` | Successfully removed. |
+
+### 2. Grading & GPA (GPS)
+**Goal:** Assign grades to enrollments and calculate the Grade Point Average.
+* **Grading Scale:** A=4, B=3, C=2, D=1.
+* **Formula:** $\frac{\sum(\text{Grade Point} \times \text{Credit})}{\sum(\text{Total Credits})}$
+* **Logic:**
+    * `assign_grade`: Updates the `grade` attribute in the Enrollment object.
+    * `get_student_GPS`: Iterates through all subjects a student is enrolled in, converts letter grades to points, and calculates the weighted average.
+
+| Function Call | Return / Output | Explanation |
+| :--- | :--- | :--- |
+| `assign_grade(student2, cs101, 'A')` | `"Done"` | Grade 'A' assigned. |
+| `get_student_GPS(student2)` | `3.0` | (A=4, B=3, C=2) across 3-credit courses averages to 3.0. |
+
+### 3. Search & Reporting
+**Goal:** Retrieve data about the system state.
+* **Logic:** Functions filter the main `enrollment_list` to find specific associations.
+
+| Function Call | Return / Output | Explanation |
+| :--- | :--- | :--- |
+| `get_no_of_student_enrolled(cs101)` | `5` | Counts total students in CS101. |
+| `get_teacher_teach(cs101)` | `Mr. Welsh` | Returns the teacher object assigned to the subject. |
+| `get_student_record(student2)` | `{'CS101': ['Comp Prog 1', 'A']...}` | Dictionary of all courses and grades for a student. |
+
+---
+
+## 🧪 Test Cases (Built-in)
+
+The `week3.py` file includes a suite of **14 Test Cases** that run automatically when the file is executed. These tests verify everything from basic enrollment to complex GPA calculations.
+
+### Sample Test Output
+When you run the code, you will see output verifying the logic:
+
+```text
+Test Case #1 : test enroll_to_subject complete
+Answer : {'66010001': 'Keanu Welsh', ...}
+{'66010001': 'Keanu Welsh', ...}
+
+...
+
+Test case #14 get_student_GPS
+Answer : 3.0
+3.0
+```
+
+# 🏦 Week 4: ATM & Bank System Simulation
+
+This week's project is a comprehensive object-oriented simulation of a Banking System. It models the interactions between a central Bank, ATM machines, Users, Accounts, and ATM Cards, handling logic for authentication, transaction limits, and fund transfers.
+
+## 📂 File Overview
+
+| File | System Name | Description |
+| :--- | :--- | :--- |
+| `week4.py` | **ATM Simulator** | A complete system managing accounts, cards, and ATM operations including deposits, withdrawals, and transfers. |
+
+---
+
+## 🏗️ System Architecture (Classes)
+
+The simulation relies on five interconnected classes:
+
+| Class | Description | Key Attributes |
+| :--- | :--- | :--- |
+| **`Bank`** | The central entity holding all users and ATM machines. | `users`, `atms` |
+| **`User`** | Represents a bank customer. | `citizen_id`, `name`, `accounts` (list) |
+| **`Account`** | Holds financial data and transaction history. | `account_number`, `balance`, `transactions` |
+| **`ATMCard`** | Represents the physical card used for access. | `card_number`, `pin`, `max_withdraw_limit` (40,000) |
+| **`ATMMachine`** | The interface for performing transactions. | `machine_id`, `initial_amount` (Cash inside machine) |
+
+---
+
+## 💳 Key Features & Logic
+
+### 1. Authentication (`insert_card`)
+**Goal:** Validate user access before allowing transactions.
+* **Logic:** The ATM accepts a card instance and a PIN string. It iterates through the Bank's users to find the matching account.
+* **Security:** Returns `None` (access denied) if the PIN is incorrect.
+
+### 2. Withdrawal Logic
+**Goal:** Safe money removal with multiple validation layers.
+* **Checks Performed:**
+    1. **Account Balance:** User must have enough money.
+    2. **Daily Limit:** Cannot exceed the card's limit (default **40,000** baht).
+    3. **ATM Cash:** The physical machine must have enough bills (`initial_amount`).
+* **Output:** Returns "Success", "Insufficient Funds" (ATM empty), or "Error" (User broke).
+
+### 3. Transfers & Deposits
+**Goal:** Moving funds between entities.
+* **Deposit:** Increases account balance and adds cash to the ATM machine's reserve.
+* **Transfer:** Atomic operation that decrements the sender's balance and increments the receiver's balance, recording a transaction log for both.
+
+---
+
+## 🧪 Test Cases (Built-in)
+
+The file includes **10 comprehensive test cases** to verify the system's robustness.
+
+### Sample Scenarios
+
+| Case # | Scenario | Expected Outcome |
+| :--- | :--- | :--- |
+| **#1** | **Card Insertion** | Returns Account object if PIN matches; otherwise `None`. |
+| **#3** | **Negative Deposit** | Returns `Error` (Cannot deposit -1 baht). |
+| **#9** | **Limit Exceeded** | Returns `Error` when trying to withdraw **45,000** (Limit is 40,000). |
+| **#10** | **ATM Empty** | Returns `Insufficient Funds` if the ATM machine lacks cash (even if user has money). |
+
+### Sample Output
+Running the script produces a detailed log of operations:
+
+```text
+Harry account before test: 20000
+Attempting to withdraw 45,000 baht...
+Expected result: Exceeds daily withdrawal limit of 40,000 baht
+Actual result: Error
+Harry account after test: 20000
+```
+
+# 🏦 Week 5: Advanced Banking System (OOP & Unit Testing)
+
+This project is an advanced evolution of the previous banking simulation. It introduces a robust Object-Oriented architecture using **Inheritance** (Base classes for Accounts, Cards, and Channels) and relies on Python's `unittest` framework to verify system integrity through 19 specific test scenarios.
+
+## 📂 File Overview
+
+| File | System Name | Description |
+| :--- | :--- | :--- |
+| `Lab5_skeleton.py` | **Banking Unit Tests** | A complete banking ecosystem implementation including `Bank`, `User`, `Account` types, `Card` types, and `TransactionChannel` types, verified by a suite of unit tests. |
+
+---
+
+## 🏗️ System Architecture
+
+The system is designed around three main abstract hierarchies:
+
+### 1. Accounts (`Account` Parent Class)
+* **`SavingAccount`**: Standard account; calculates 0.5% interest. Limits withdrawals to 50,000/transaction.
+* **`FixedAccount`**: High-interest account (2.5%) with a maturity period. Withdrawing early results in a penalty (reduced interest).
+* **`CurrentAccount`**: Standard transactional account for merchants.
+
+### 2. Cards (`Card` Parent Class)
+* **`ATMCard`**: Can only be used at ATM machines. Annual fee: 150.
+* **`DebitCard`**: Base for cards that work at ATMs and EDC machines.
+    * **`ShoppingDebitCard`**: Earns 1% cashback on EDC purchases > 1000.
+    * **`TravelDebitCard`**: Standard debit card (simulated insurance benefits).
+
+### 3. Transaction Channels (`TransactionChannel` Parent Class)
+* **`ATMMachine`**: Machine for withdrawals/deposits using Cards + PIN.
+* **`Counter`**: Human-operated branch services. Requires **Identity Verification** (Citizen ID).
+* **`EDCMachine`**: Merchant devices for swiping Debit Cards to pay for goods.
+
+---
+
+## 🧪 Key Logic & Features
+
+### 1. Fixed Account Maturity Logic
+**Goal:** Calculate interest differently based on whether the withdrawal is before or after the fixed term.
+* **Logic:**
+    * If `current_date >= maturity_date`: Full interest (2.5%) is applied.
+    * If `current_date < maturity_date`: Reduced interest (approx 1.25%) is calculated based on months passed.
+    * **Constraint:** Cannot withdraw if no initial deposit exists.
+
+### 2. EDC Payment & Cashback
+**Goal:** Allow merchants to accept payments and give cashback to specific cards.
+* **Logic:**
+    * `swipe_card`: Verifies the card is a `DebitCard` (ATM cards fail here) and checks the PIN.
+    * `pay`: Transfers money from Customer to Merchant.
+    * `calculate_cashback`: If the card is a `ShoppingDebitCard` and amount > 1000, returns 1% back to the user.
+
+### 3. Counter Identity Verification
+**Goal:** Secure transactions performed at a physical bank branch.
+* **Logic:** Methods like `deposit` or `withdraw` at the `Counter` require `citizen_id`. The system verifies that `account.user.citizen_id` matches the person standing at the counter.
+
+---
+
+## 📊 Test Cases (Unit Tests)
+
+The file uses `unittest` to run ~19 specific scenarios. Below are examples of the inputs and expected behaviors defined in the tests.
+
+### Test Group: Account Management
+| Test | Input / Action | Expected Output |
+| :--- | :--- | :--- |
+| **Interest** | `thor_savings.calculate_interest(1)` (1 year) | Balance increases by **0.5%**. Transaction type `I` recorded. |
+| **Fixed Early** | Withdraw from `FixedAccount` after 6 months (Term: 12). | Success, but interest is calculated at a **reduced rate** (~1.25%). |
+| **No Deposit** | Withdraw from `FixedAccount` with 0 balance. | **Error:** "No initial deposit". |
+
+### Test Group: Channels & Security
+| Test | Input / Action | Expected Output |
+| :--- | :--- | :--- |
+| **Counter Deposit** | `counter.deposit(..., citizen_id="WRONG_ID")` | **Error:** "Invalid identity". |
+| **ATM Withdraw** | `atm.withdraw` > Account Balance | **Error** (Insufficient funds). |
+| **ATM Limit** | `atm.withdraw(50001)` on Saving Account | **Error** (Exceeds 50k limit). |
+
+### Test Group: Cards & EDC
+| Test | Input / Action | Expected Output |
+| :--- | :--- | :--- |
+| **Shopping Card** | `edc.pay(steve_shopping_card, 2000)` | Merchant +2000. Steve -2000. Steve gets **20 cashback** (1%). |
+| **ATM Card on EDC** | `edc.swipe_card(tony_atm_card, ...)` | **Error:** "Invalid card or PIN" (ATM cards cannot be used on EDC). |
+
+---
+
+## 🚀 How to Run
+
+Since this file uses the `unittest` framework, you execute it differently than a standard script. It will automatically discover and run all test cases.
+
+```bash
+# Run all tests with verbose output
+python -m unittest Lab5_skeleton.py -v
+```
